@@ -32,7 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 Dealer(
                     'https://almaaridnow.com.sa/wp-content/uploads/2019/04/P1020178.jpg',
                     'معرض كلاس',
-                    4.3)
+                    4.3),
+                Dealer(
+                    'https://almaaridnow.com.sa/wp-content/uploads/2019/04/P1020178.jpg',
+                    'معرض كلاس',
+                    4.3),
               ],
             ),
           ),
