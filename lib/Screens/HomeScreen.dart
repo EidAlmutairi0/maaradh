@@ -26,13 +26,13 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: [
                 Dealer(
-                    'https://bramjnaa.com/wp-content/uploads/saleh-cars-showroomunnamed-1200x675.jpg',
-                    'معرض صالح',
+                    'https://almaaridnow.com.sa/wp-content/uploads/2019/05/%D9%A2%D9%A0%D9%A1%D9%A9%D9%A0%D9%A5%D9%A0%D9%A2_%D9%A2%D9%A0%D9%A2%D9%A4%D9%A4%D9%A1.jpg',
+                    'معرض العُمَر',
                     4.1),
                 Dealer(
-                    'https://almaaridnow.com.sa/wp-content/uploads/2019/04/P1020178.jpg',
-                    'معرض كلاس',
-                    4.3),
+                    'https://bramjnaa.com/wp-content/uploads/saleh-cars-showroomunnamed-1200x675.jpg',
+                    'معرض صالح',
+                    4.2),
                 Dealer(
                     'https://almaaridnow.com.sa/wp-content/uploads/2019/04/P1020178.jpg',
                     'معرض كلاس',
