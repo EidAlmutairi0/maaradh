@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:maaradh/Screens/DealerScreen.dart';
 
 class Dealer extends StatelessWidget {
   String? image;
@@ -16,7 +17,12 @@ class Dealer extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const DealerScreen()),
+          );
+        },
         child: Container(
           decoration: BoxDecoration(
             boxShadow: [
