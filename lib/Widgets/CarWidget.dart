@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class Car extends StatelessWidget {
   String? image;
   String? name;
@@ -9,11 +8,13 @@ class Car extends StatelessWidget {
   String? price;
   int? mileage;
 
-  Car(String image,
-  String name,
-  String year,
-  String price,
-  int mileage,){
+  Car(
+    String image,
+    String name,
+    String year,
+    String price,
+    int mileage,
+  ) {
     this.image = image;
     this.name = name;
     this.year = year;
@@ -55,116 +56,122 @@ class Car extends StatelessWidget {
                 height: 60,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 30, right: 30),
-                      child: Center(
-                        child: Row(
-
-                          children: [
-
-                            Expanded(child: Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Container(
-                                    alignment: Alignment.centerRight,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "السيارة : ",
-                                          style: GoogleFonts.readexPro(
-                                              fontSize: 12, fontWeight: FontWeight.w500),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                        Text(
-                                          name!,
-                                          style: GoogleFonts.readexPro(
-                                              fontSize: 12, fontWeight: FontWeight.w300),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                      ],
-                                    ),
+                  child: Center(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "السيارة : ",
+                                        style: GoogleFonts.readexPro(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      Text(
+                                        name!,
+                                        style: GoogleFonts.readexPro(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w300),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ],
                                   ),
-                                  // ignore: prefer_const_constructors
-                                  Container(
-
-                                    alignment: Alignment.centerRight,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "الممشى : ",
-                                          style: GoogleFonts.readexPro(
-                                              fontSize: 12, fontWeight: FontWeight.w500),
-                                        ),
-                                        Text(
-                                          mileage.toString()!,
-                                          style: GoogleFonts.readexPro(
-                                              fontSize: 12, fontWeight: FontWeight.w300),
-                                        ),
-                                      ],
-                                    ),
+                                ),
+                                // ignore: prefer_const_constructors
+                                Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "الممشى : ",
+                                        style: GoogleFonts.readexPro(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Text(
+                                        mileage.toString(),
+                                        style: GoogleFonts.readexPro(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                    ],
                                   ),
-
-                                ],
-                              ),
-                            ),flex: 2,
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              width: 30,
-                            ),
-                            Expanded(child: Container(
-                              alignment: Alignment.centerRight,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Container(
-                                    alignment: Alignment.centerRight,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "السنة : ",
-                                          style: GoogleFonts.readexPro(
-                                              fontSize: 12, fontWeight: FontWeight.w500),
-                                        ),
-                                        Text(
-                                          year!,
-                                          style: GoogleFonts.readexPro(
-                                              fontSize: 12, fontWeight: FontWeight.w300),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  // ignore: prefer_const_constructors
-                                  Container(
-                                    alignment: Alignment.centerRight,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "السعر : ",
-                                          style: GoogleFonts.readexPro(
-                                              fontSize: 12, fontWeight: FontWeight.w500),
-                                        ),
-                                        Text(
-                                          price!,
-                                          style: GoogleFonts.readexPro(
-                                              fontSize: 12, fontWeight: FontWeight.w300),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-
-                                ],
-                              ),
-                            ),flex: 2,
-                            ),
-
-                          ],
+                          ),
+                          flex: 2,
                         ),
-                      ),
+                        Expanded(
+                          flex: 1,
+                          child: SizedBox(
+                            width: 30,
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "السنة : ",
+                                        style: GoogleFonts.readexPro(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Text(
+                                        year!,
+                                        style: GoogleFonts.readexPro(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w300),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ],
+                                  ),
+                                ),
 
-
+                                // ignore: prefer_const_constructors
+                                Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "السعر : ",
+                                        style: GoogleFonts.readexPro(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Text(
+                                        price!,
+                                        style: GoogleFonts.readexPro(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w300),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          flex: 2,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),

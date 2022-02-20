@@ -5,6 +5,7 @@ import 'package:maaradh/Widgets/DealerWidget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+  static String currentDealer = "";
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -17,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'الرئيسية',
+            'المعارض',
             style: GoogleFonts.readexPro(),
           ),
         ),

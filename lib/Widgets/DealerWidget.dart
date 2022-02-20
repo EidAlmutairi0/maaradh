@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:maaradh/Screens/DealerScreen.dart';
+import 'package:maaradh/Screens/HomeScreen.dart';
 
-class Dealer extends StatelessWidget {
+class Dealer extends StatefulWidget {
   String? image;
   String? name;
   double? distance;
@@ -12,15 +13,26 @@ class Dealer extends StatelessWidget {
     this.name = name;
     this.distance = distance;
   }
+
+  @override
+  State<Dealer> createState() => _DealerState();
+}
+
+class _DealerState extends State<Dealer> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: InkWell(
         onTap: () {
+          setState(() {
+            HomeScreen.currentDealer = widget.name!;
+          });
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const DealerScreen()),
+            MaterialPageRoute(
+                builder: (context) =>
+                    DealerScreen(widget.image, widget.name, widget.distance)),
           );
         },
         child: Container(
@@ -40,7 +52,7 @@ class Dealer extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             child: GridTile(
               child: Image.network(
-                image!,
+                widget.image!,
                 fit: BoxFit.cover,
               ),
               footer: Container(
@@ -55,13 +67,13 @@ class Dealer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        name!,
+                        widget.name!,
                         style: GoogleFonts.readexPro(
                             fontSize: 18, fontWeight: FontWeight.w300),
                       ),
                       // ignore: prefer_const_constructors
                       Text(
-                        "${distance.toString()}km",
+                        "${widget.distance.toString()}km",
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w300),
                       ),
