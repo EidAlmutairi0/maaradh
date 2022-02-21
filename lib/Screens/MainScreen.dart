@@ -5,6 +5,7 @@ import 'MapScreen.dart';
 import 'HomeScreen.dart';
 import 'MessagesScreen.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 // ignore: use_key_in_widget_constructors
 class MainScreen extends StatefulWidget {

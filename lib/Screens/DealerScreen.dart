@@ -33,7 +33,7 @@ class _DealerScreenState extends State<DealerScreen> {
                   ),
                   footer: Container(
                     decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(15) , topRight: Radius.circular(15)),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20) , topRight: Radius.circular(20)),
                       color: Colors.white,
                     ),
                     height: 100,
@@ -107,7 +107,6 @@ class _DealerScreenState extends State<DealerScreen> {
               child: InkWell(
                 onTap: (){
                   showCupertinoModalBottomSheet(
-                    expand: true,
                     isDismissible: false,
                     enableDrag: false,
                     context: context,
@@ -121,7 +120,7 @@ class _DealerScreenState extends State<DealerScreen> {
                   child: Row(
                     children: [
                       Text("تصفية"),
-                      Icon(Icons.filter_alt, size: 30,color: Colors.blueAccent,),
+                      Icon(Icons.filter_alt_outlined, size: 30,color: Colors.blueAccent,),
                     ],
                   ),
                 ),
