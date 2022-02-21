@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:maaradh/Widgets/CarWidget.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'FilterScreen.dart';
 class DealerScreen extends StatefulWidget {
   String? image;
   String? name;
@@ -18,89 +19,149 @@ class _DealerScreenState extends State<DealerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('test'),
-      ),
       body: Column(
         children: [
-          GridTile(
-            header: Container(
-              height: 20,
-              width: 20,
-              color: Colors.blueAccent,
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.arrow_back),
-              ),
-            ),
-            footer: Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(20),
-                    topLeft: Radius.circular(20)),
-                color: Colors.white,
-              ),
-              height: 100,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 30, right: 30),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            widget.name!,
-                            style: GoogleFonts.readexPro(
-                                fontSize: 22, fontWeight: FontWeight.w300),
-                          ),
-                          // ignore: prefer_const_constructors
-                          Text(
-                            "${widget.distance.toString()}km",
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.w300),
-                          ),
-                        ],
-                      ),
-                      Row(
+          SizedBox(
+            width: MediaQuery.of(context).size.width ,
+            height: 350,
+            child: Stack(
+              children: [
+                GridTile(
+                  child: Image.network(
+                    widget.image!,
+                    fit: BoxFit.cover,
+                  ),
+                  footer: Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(15) , topRight: Radius.circular(15)),
+                      color: Colors.white,
+                    ),
+                    height: 100,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 30, right: 30),
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.phone_outlined,
-                              size: 35,
-                              color: Colors.blueAccent,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                widget.name!,
+                                style: GoogleFonts.readexPro(
+                                    fontSize: 18, fontWeight: FontWeight.w300),
+                              ),
+                              // ignore: prefer_const_constructors
+                              Text(
+                                "${widget.distance.toString()}km",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w300),
+                              ),
+                            ],
                           ),
-                          const SizedBox(
-                            width: 20,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(onPressed: (){}, icon: Icon(Icons.phone_outlined , size: 30, color: Colors.blueAccent,),),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              IconButton(onPressed: (){}, icon: Icon(Icons.mail_outline_rounded, size: 30,color: Colors.blueAccent,),),
+                            ],
                           ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.mail_outlined,
-                              size: 35,
-                              color: Colors.blueAccent,
-                            ),
-                          )
+
                         ],
                       ),
+                    ),
+                  ),
+
+                ),
+                Positioned(
+                  top: 50,
+                  right:30,
+                  height: 50,
+                  width: 50,
+                  child: InkWell(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blueAccent,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Center(child: Icon(Icons.arrow_back, color: Colors.white,)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(                    alignment: Alignment.topLeft,
+
+
+            height: 50,
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: InkWell(
+                onTap: (){
+                  showCupertinoModalBottomSheet(
+                    expand: true,
+                    isDismissible: false,
+                    enableDrag: false,
+                    context: context,
+                    builder: (context) => FilterScreen(),
+                  );
+                },
+                child: Container(
+                  width: 70,
+                  alignment: Alignment.topLeft,
+
+                  child: Row(
+                    children: [
+                      Text("تصفية"),
+                      Icon(Icons.filter_alt, size: 30,color: Colors.blueAccent,),
                     ],
                   ),
                 ),
               ),
             ),
-            child: Image.network(
-              widget.image!,
-              fit: BoxFit.cover,
-            ),
           ),
-          Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-              "لاند كروزر", "2018", "180.000", 44000),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomScrollView(
+                primary: false,
+                slivers: <Widget>[
+
+                  SliverPadding(
+                    padding: const EdgeInsets.all(15),
+                    sliver: SliverGrid.count(
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      crossAxisCount: 2,
+                      children: <Widget>[
+                        Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
+                            "لاند كروزر", "2018", "180.000", 44000),
+                        Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
+                            "لاند كروزر", "2018", "180.000", 44000),
+                        Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
+                            "لاند كروزر", "2018", "180.000", 44000),
+                        Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
+                            "لاند كروزر", "2018", "180.000", 44000),
+                        Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
+                            "لاند كروزر", "2018", "180.000", 44000),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ),
+
+
+
         ],
       ),
     );
