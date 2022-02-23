@@ -41,6 +41,7 @@ dependencies:
   flutter_native_splash: ^2.0.5
   modal_bottom_sheet: ^2.0.0
   group_button: ^4.5.0
+  dropdown_button2: ^1.1.1
 
 
 dev_dependencies:

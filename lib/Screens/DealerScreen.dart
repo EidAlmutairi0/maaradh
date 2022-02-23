@@ -3,10 +3,15 @@ import 'package:maaradh/Widgets/CarWidget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'FilterScreen.dart';
+import '../Widgets/FilterElements.dart';
+
 class DealerScreen extends StatefulWidget {
   String? image;
   String? name;
   double? distance;
+  static List<CarBrand> savedCarBRands = [];
+  static String selectedYear = "1800";
+  static String selectedState = "لم يحدد";
 
   // ignore: use_key_in_widget_constructors
   DealerScreen(this.image, this.name, this.distance, {Key? key});
@@ -22,7 +27,7 @@ class _DealerScreenState extends State<DealerScreen> {
       body: Column(
         children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width ,
+            width: MediaQuery.of(context).size.width,
             height: 350,
             child: Stack(
               children: [
@@ -33,7 +38,9 @@ class _DealerScreenState extends State<DealerScreen> {
                   ),
                   footer: Container(
                     decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20) , topRight: Radius.circular(20)),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20)),
                       color: Colors.white,
                     ),
                     height: 100,
@@ -54,7 +61,7 @@ class _DealerScreenState extends State<DealerScreen> {
                               // ignore: prefer_const_constructors
                               Text(
                                 "${widget.distance.toString()}km",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.w300),
                               ),
                             ],
@@ -62,27 +69,39 @@ class _DealerScreenState extends State<DealerScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              IconButton(onPressed: (){}, icon: Icon(Icons.phone_outlined , size: 30, color: Colors.blueAccent,),),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.phone_outlined,
+                                  size: 30,
+                                  color: Colors.blueAccent,
+                                ),
+                              ),
                               SizedBox(
                                 width: 10,
                               ),
-                              IconButton(onPressed: (){}, icon: Icon(Icons.mail_outline_rounded, size: 30,color: Colors.blueAccent,),),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.mail_outline_rounded,
+                                  size: 30,
+                                  color: Colors.blueAccent,
+                                ),
+                              ),
                             ],
                           ),
-
                         ],
                       ),
                     ),
                   ),
-
                 ),
                 Positioned(
                   top: 50,
-                  right:30,
+                  right: 30,
                   height: 50,
                   width: 50,
                   child: InkWell(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pop(context);
                     },
                     child: Container(
@@ -90,22 +109,24 @@ class _DealerScreenState extends State<DealerScreen> {
                         color: Colors.blueAccent,
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      child: Center(child: Icon(Icons.arrow_back, color: Colors.white,)),
+                      child: Center(
+                          child: Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      )),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          Container(                    alignment: Alignment.topLeft,
-
-
-            height: 50,
+          Container(
+            alignment: Alignment.topLeft,
             color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.only(left: 10),
               child: InkWell(
-                onTap: (){
+                onTap: () {
                   showCupertinoModalBottomSheet(
                     isDismissible: false,
                     enableDrag: false,
@@ -116,11 +137,14 @@ class _DealerScreenState extends State<DealerScreen> {
                 child: Container(
                   width: 70,
                   alignment: Alignment.topLeft,
-
                   child: Row(
-                    children: [
+                    children: const [
                       Text("تصفية"),
-                      Icon(Icons.filter_alt_outlined, size: 30,color: Colors.blueAccent,),
+                      Icon(
+                        Icons.filter_alt_outlined,
+                        size: 30,
+                        color: Colors.blueAccent,
+                      ),
                     ],
                   ),
                 ),
@@ -128,39 +152,31 @@ class _DealerScreenState extends State<DealerScreen> {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
               child: CustomScrollView(
-                primary: false,
-                slivers: <Widget>[
-
-                  SliverPadding(
-                    padding: const EdgeInsets.all(15),
-                    sliver: SliverGrid.count(
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      crossAxisCount: 2,
-                      children: <Widget>[
-                        Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-                            "لاند كروزر", "2018", "180.000", 44000),
-                        Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-                            "لاند كروزر", "2018", "180.000", 44000),
-                        Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-                            "لاند كروزر", "2018", "180.000", 44000),
-                        Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-                            "لاند كروزر", "2018", "180.000", 44000),
-                        Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-                            "لاند كروزر", "2018", "180.000", 44000),
-                      ],
-                    ),
-                  ),
-                ],
+            primary: false,
+            slivers: <Widget>[
+              SliverPadding(
+                padding: const EdgeInsets.all(20),
+                sliver: SliverGrid.count(
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  crossAxisCount: 2,
+                  children: <Widget>[
+                    Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
+                        "لاند كروزر", "2018", "180.000", 44000),
+                    Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
+                        "لاند كروزر", "2018", "180.000", 44000),
+                    Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
+                        "لاند كروزر", "2018", "180.000", 44000),
+                    Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
+                        "لاند كروزر", "2018", "180.000", 44000),
+                    Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
+                        "لاند كروزر", "2018", "180.000", 44000),
+                  ],
+                ),
               ),
-            )
-          ),
-
-
-
+            ],
+          )),
         ],
       ),
     );
