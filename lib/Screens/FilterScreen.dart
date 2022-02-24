@@ -211,7 +211,7 @@ class _FilterScreenState extends State<FilterScreen> {
                               ),
                             ],
                           ),
-                          items: yesrs
+                          items: yesrs.reversed
                               .map((item) => DropdownMenuItem<String>(
                                     value: item,
                                     child: Text(

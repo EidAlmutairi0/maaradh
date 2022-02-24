@@ -44,6 +44,12 @@ dependencies:
   dropdown_button2: ^1.1.1
 
 
+flutter_native_splash:
+  color: "#2b8bd6"
+  image: assets/images/appLogo.png
+  android: true
+  ios: true
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
