@@ -1,8 +1,9 @@
-// ignore_for_file: file_names
+// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:maaradh/Widgets/DealerWidget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,6 +14,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+
   String? selectedState;
   List<String> states = [
     'الكل',
@@ -118,18 +121,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              Dealer(
-                  'https://almaaridnow.com.sa/wp-content/uploads/2019/05/%D9%A2%D9%A0%D9%A1%D9%A9%D9%A0%D9%A5%D9%A0%D9%A2_%D9%A2%D9%A0%D9%A2%D9%A4%D9%A4%D9%A1.jpg',
-                  'معرض العُمَر',
-                  4.1),
-              Dealer(
-                  'https://bramjnaa.com/wp-content/uploads/saleh-cars-showroomunnamed-1200x675.jpg',
-                  'معرض صالح',
-                  4.2),
-              Dealer(
-                  'https://almaaridnow.com.sa/wp-content/uploads/2019/04/P1020178.jpg',
-                  'معرض كلاس',
-                  4.3),
+              StreamBuilder<QuerySnapshot>(
+                  stream: _firebaseFirestore.collection('Dealers').snapshots(),
+                  builder: (context, snapshot) {
+                    List<Dealer> dealers = [];
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 200),
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    for (var a in snapshot.data!.docs) {
+                      Dealer temp =
+                          Dealer(a.id, a.get('image'), a.get('Name'), 5);
+                      dealers.add(temp);
+                    }
+                    return Column(
+                      children: dealers,
+                    );
+                  }),
             ],
           ),
         ));

@@ -5,8 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'FilterScreen.dart';
 import '../Widgets/FilterElements.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DealerScreen extends StatefulWidget {
+  String? id;
   String? image;
   String? name;
   double? distance;
@@ -15,13 +17,15 @@ class DealerScreen extends StatefulWidget {
   static String selectedState = "لم يحدد";
 
   // ignore: use_key_in_widget_constructors
-  DealerScreen(this.image, this.name, this.distance, {Key? key});
+  DealerScreen(this.id, this.image, this.name, this.distance, {Key? key});
 
   @override
   _DealerScreenState createState() => _DealerScreenState();
 }
 
 class _DealerScreenState extends State<DealerScreen> {
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +42,7 @@ class _DealerScreenState extends State<DealerScreen> {
               ),
               background: Image.network(
                 widget.image!,
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.cover,
               ),
             ),
             expandedHeight: MediaQuery.of(context).size.height * 0.305,
@@ -65,7 +69,7 @@ class _DealerScreenState extends State<DealerScreen> {
                           children: [
                             IconButton(
                               onPressed: () {},
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.phone_outlined,
                                 size: 30,
                                 color: Colors.blueAccent,
@@ -73,7 +77,7 @@ class _DealerScreenState extends State<DealerScreen> {
                             ),
                             IconButton(
                               onPressed: () {},
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.mail_outline_rounded,
                                 size: 30,
                                 color: Colors.blueAccent,
@@ -81,7 +85,7 @@ class _DealerScreenState extends State<DealerScreen> {
                             ),
                             IconButton(
                               onPressed: () {},
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.map_outlined,
                                 size: 30,
                                 color: Colors.blueAccent,
@@ -93,7 +97,7 @@ class _DealerScreenState extends State<DealerScreen> {
                     ),
                   ),
                 ),
-                Divider(),
+                const Divider(),
                 Container(
                   alignment: Alignment.topLeft,
                   child: Padding(
@@ -127,33 +131,46 @@ class _DealerScreenState extends State<DealerScreen> {
               ]),
             ),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.all(10),
-            sliver: SliverGrid.count(
-              crossAxisCount: 2,
-              children: <Widget>[
-                Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-                    "لاند كروزر", "2018", "180.000", 44000),
-                Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-                    "لاند كروزر", "2018", "180.000", 44000),
-                Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-                    "لاند كروزر", "2018", "180.000", 44000),
-                Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-                    "لاند كروزر", "2018", "180.000", 44000),
-                Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-                    "لاند كروزر", "2018", "180.000", 44000),
-                Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-                    "لاند كروزر", "2018", "180.000", 44000),
-                Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-                    "لاند كروزر", "2018", "180.000", 44000),
-                Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-                    "لاند كروزر", "2018", "180.000", 44000),
-                Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-                    "لاند كروزر", "2018", "180.000", 44000),
-                Car("https://cdn.motor1.com/images/mgl/6LWeG/s1/eksterer-toyota-land-cruiser-300.jpg",
-                    "لاند كروزر", "2018", "180.000", 44000),
-              ],
-            ),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              Center(
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: _firebaseFirestore
+                        .collection('Dealers')
+                        .doc(widget.id)
+                        .collection("Cars")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      List<Car> cars = [];
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                      if (snapshot.hasError || snapshot.data!.docs.isEmpty) {
+                        return const Padding(
+                          padding: EdgeInsets.only(top: 20),
+                          child: Text("لا يوجد سيارات"),
+                        );
+                      }
+                      for (var car in snapshot.data!.docs) {
+                        Car temp = Car(
+                            car.get("image"),
+                            car.get("Name"),
+                            car.get("Year"),
+                            car.get("Price"),
+                            car.get("Mileage"));
+                        cars.add(temp);
+                      }
+
+                      return GridView.count(
+                        physics: ClampingScrollPhysics(),
+                        shrinkWrap: true,
+                        crossAxisCount: 2,
+                        children: cars,
+                      );
+                    }),
+              ),
+            ]),
           ),
         ],
       ),

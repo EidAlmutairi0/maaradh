@@ -4,11 +4,13 @@ import 'package:maaradh/Screens/DealerScreen.dart';
 import 'package:maaradh/Screens/HomeScreen.dart';
 
 class Dealer extends StatefulWidget {
+  String? id;
   String? image;
   String? name;
   double? distance;
-  Dealer(String image, String name, double distance, {Key? key})
+  Dealer(String id, String image, String name, double distance, {Key? key})
       : super(key: key) {
+    this.id = id;
     this.image = image;
     this.name = name;
     this.distance = distance;
@@ -27,13 +29,13 @@ class _DealerState extends State<Dealer> {
         child: InkWell(
           onTap: () {
             setState(() {
-              HomeScreen.currentDealer = widget.name!;
+              HomeScreen.currentDealer = widget.id!;
             });
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      DealerScreen(widget.image, widget.name, widget.distance)),
+                  builder: (context) => DealerScreen(
+                      widget.id, widget.image, widget.name, widget.distance)),
             );
           },
           child: Container(

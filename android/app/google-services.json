@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "605196648011",
+    "project_id": "maaradh-ab8ea",
+    "storage_bucket": "maaradh-ab8ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:605196648011:android:79d4cbfdd2efc9335217ce",
+        "android_client_info": {
+          "package_name": "com.example.maaradh"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "605196648011-rpl0c264nj33jlvcodepn3vlba3ot51a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyHKIEoipyAk9W5aGwDlycP2w19ykM4-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "605196648011-rpl0c264nj33jlvcodepn3vlba3ot51a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
