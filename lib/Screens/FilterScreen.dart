@@ -14,7 +14,7 @@ class FilterScreen extends StatefulWidget {
 
 class _FilterScreenState extends State<FilterScreen> {
   List<String> carBrand = [
-    "تايوتا",
+    "تويوتا",
     "شفرولية",
     "نيسان",
     "فورد",
@@ -30,21 +30,12 @@ class _FilterScreenState extends State<FilterScreen> {
       int i = brand.index!;
       brandsGroupButtonController.selectedIndexes.add(i);
     }
-    if (DealerScreen.selectedState != "لم يحدد") {
-      selectedState = DealerScreen.selectedState;
-    }
 
     if (DealerScreen.selectedYear != "1800") {
       selectedYear = DealerScreen.selectedYear;
     }
   }
 
-  String? selectedState;
-  List<String> states = [
-    'أي',
-    'جديد',
-    'مستعمل',
-  ];
   void getYears() {
     for (int i = 30; i >= 0; i--) {
       yesrs.add(DateTime(DateTime.now().year - i, 1).year.toString());
@@ -131,9 +122,7 @@ class _FilterScreenState extends State<FilterScreen> {
                   brandsGroupButtonController.unselectAll();
                   setState(() {
                     selectedDate = DateTime(DateTime.now().year + 2, 1);
-                    selectedState = null;
                     selectedYear = null;
-                    DealerScreen.selectedState = "لم يحدد";
                     DealerScreen.selectedYear = "1800";
                     DealerScreen.savedCarBRands = [];
                   });
@@ -160,7 +149,7 @@ class _FilterScreenState extends State<FilterScreen> {
                   isRadio: false,
                   onSelected: (index, isSelected) {
                     if (!isSelected) {
-                      DealerScreen.savedCarBRands.remove(index);
+                      DealerScreen.savedCarBRands.removeAt(index);
                       print('$index button is removed');
                     } else {
                       DealerScreen.savedCarBRands
@@ -268,95 +257,6 @@ class _FilterScreenState extends State<FilterScreen> {
               ),
               const SizedBox(
                 height: 15,
-              ),
-              Row(
-                children: [
-                  Container(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      'الحالة:',
-                      style: GoogleFonts.readexPro(
-                          fontSize: 16, fontWeight: FontWeight.w300),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton2(
-                          isExpanded: true,
-                          hint: Row(
-                            children: const [
-                              SizedBox(
-                                width: 4,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  'اختر',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black54,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                          items: states
-                              .map((item) => DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(
-                                      item,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black54,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ))
-                              .toList(),
-                          value: selectedState,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedState = value as String;
-                              DealerScreen.selectedState = value;
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.arrow_forward_ios_outlined,
-                          ),
-                          iconSize: 14,
-                          iconEnabledColor: Colors.black54,
-                          iconDisabledColor: Colors.black54,
-                          buttonHeight: 50,
-                          buttonWidth: 160,
-                          buttonPadding:
-                              const EdgeInsets.only(left: 14, right: 14),
-                          buttonDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(
-                              color: Colors.black26,
-                            ),
-                          ),
-                          itemHeight: 40,
-                          itemPadding:
-                              const EdgeInsets.only(left: 14, right: 14),
-                          dropdownMaxHeight: 200,
-                          dropdownPadding: null,
-                          dropdownDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          dropdownElevation: 8,
-                          scrollbarRadius: const Radius.circular(40),
-                          scrollbarThickness: 6,
-                          scrollbarAlwaysShow: true,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),

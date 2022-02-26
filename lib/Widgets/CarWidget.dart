@@ -7,19 +7,16 @@ class Car extends StatelessWidget {
   String? year;
   String? price;
   int? mileage;
+  String? brand;
 
-  Car(
-    String image,
-    String name,
-    String year,
-    String price,
-    int mileage,
-  ) {
+  Car(String image, String name, String year, String price, int mileage,
+      String brand) {
     this.image = image;
     this.name = name;
     this.year = year;
     this.price = price;
     this.mileage = mileage;
+    this.brand = brand;
   }
 
   @override
