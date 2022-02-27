@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:maaradh/Widgets/CarWidget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
+import '../Providers/CarsProvider.dart';
 import 'FilterScreen.dart';
 import '../Widgets/FilterElements.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,12 +25,13 @@ class DealerScreen extends StatefulWidget {
 }
 
 class _DealerScreenState extends State<DealerScreen> {
-  List<Car>? filter(List<Car> cars) {
+  List<Car>? filter(List<Car> cars , context) {
+    var carProv = Provider.of<CarsProvider>(context);
     List<Car> tempList = [];
-    if (DealerScreen.savedCarBRands.isNotEmpty) {
+    if (carProv.savedCarBRands.isNotEmpty) {
       for (Car car in cars) {
-        for (int i = 0; i < DealerScreen.savedCarBRands.length; i++) {
-          if (DealerScreen.savedCarBRands[i].brandName == car.brand) {
+        for (int i = 0; i < carProv.savedCarBRands.length; i++) {
+          if (carProv.savedCarBRands[i].brandName == car.brand) {
             tempList.add(car);
           }
         }
@@ -45,16 +48,10 @@ class _DealerScreenState extends State<DealerScreen> {
 
   @override
   @override
-  void dispose() {
-    setState(() {
-      DealerScreen.savedCarBRands = [];
-      DealerScreen.selectedYear = "1800";
-    });
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
+    var carProv = Provider.of<CarsProvider>(context);
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -162,7 +159,7 @@ class _DealerScreenState extends State<DealerScreen> {
             delegate: SliverChildListDelegate([
               Center(
                 child: StreamBuilder<QuerySnapshot>(
-                    stream: (DealerScreen.selectedYear == "1800")
+                    stream: (carProv.selectedYear == "1800")
                         ? _firebaseFirestore
                             .collection('Dealers')
                             .doc(widget.id)
@@ -172,7 +169,7 @@ class _DealerScreenState extends State<DealerScreen> {
                             .collection('Dealers')
                             .doc(widget.id)
                             .collection("Cars")
-                            .where("Year", isEqualTo: DealerScreen.selectedYear)
+                            .where("Year", isEqualTo: carProv.selectedYear)
                             .snapshots(),
                     builder: (context, snapshot) {
                       List<Car> cars = [];
@@ -197,7 +194,7 @@ class _DealerScreenState extends State<DealerScreen> {
                         cars.add(temp);
                       }
 
-                      cars = filter(cars)!;
+                      cars = filter(cars , context)!;
 
                       return GridView.count(
                         physics: ClampingScrollPhysics(),

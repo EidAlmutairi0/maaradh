@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:group_button/group_button.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:maaradh/Providers/CarsProvider.dart';
+import 'package:provider/provider.dart';
 import 'DealerScreen.dart';
 import '../Widgets/FilterElements.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -26,13 +28,14 @@ class _FilterScreenState extends State<FilterScreen> {
   ];
   GroupButtonController brandsGroupButtonController = GroupButtonController();
   void selectedButtons() {
-    for (CarBrand brand in DealerScreen.savedCarBRands) {
+
+    for (CarBrand brand in Provider.of<CarsProvider>(context, listen: false).savedCarBRands) {
       int i = brand.index!;
       brandsGroupButtonController.selectedIndexes.add(i);
     }
 
-    if (DealerScreen.selectedYear != "1800") {
-      selectedYear = DealerScreen.selectedYear;
+    if (Provider.of<CarsProvider>(context, listen: false).selectedYear != "1800") {
+      selectedYear = Provider.of<CarsProvider>(context, listen: false).selectedYear;
     }
   }
 
@@ -41,6 +44,7 @@ class _FilterScreenState extends State<FilterScreen> {
       yesrs.add(DateTime(DateTime.now().year - i, 1).year.toString());
     }
   }
+
 
   String? selectedYear;
   List<String> yesrs = [];
@@ -94,8 +98,10 @@ class _FilterScreenState extends State<FilterScreen> {
     super.initState();
   }
 
+
   @override
   Widget build(BuildContext context) {
+    var carProv = Provider.of<CarsProvider>(context);
     return Container(
       height: MediaQuery.of(context).size.height * 0.6,
       child: Scaffold(
@@ -109,6 +115,8 @@ class _FilterScreenState extends State<FilterScreen> {
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
+                  print(carProv.selectedYear);
+
                 },
                 style: ElevatedButton.styleFrom(primary: Colors.blueAccent),
                 child: Text('Save'),
@@ -123,9 +131,10 @@ class _FilterScreenState extends State<FilterScreen> {
                   setState(() {
                     selectedDate = DateTime(DateTime.now().year + 2, 1);
                     selectedYear = null;
-                    DealerScreen.selectedYear = "1800";
-                    DealerScreen.savedCarBRands = [];
+                    carProv.resetBrans();
+                    carProv.resetYear();
                   });
+                  print(carProv.selectedYear);
                 },
               ),
             ],
@@ -149,14 +158,14 @@ class _FilterScreenState extends State<FilterScreen> {
                   isRadio: false,
                   onSelected: (index, isSelected) {
                     if (!isSelected) {
-                      DealerScreen.savedCarBRands.removeAt(index);
+                      carProv.removeBrand(index);
                       print('$index button is removed');
                     } else {
-                      DealerScreen.savedCarBRands
-                          .add(CarBrand(carBrand[index], index));
+                      carProv.addToBrands(CarBrand(carBrand[index], index));
+
                       print('$index button is add');
                     }
-                    for (CarBrand brand in DealerScreen.savedCarBRands) {
+                    for (CarBrand brand in carProv.savedCarBRands) {
                       print(carBrand[brand.index!]);
                     }
                   },
@@ -218,7 +227,7 @@ class _FilterScreenState extends State<FilterScreen> {
                           onChanged: (value) {
                             setState(() {
                               selectedYear = value as String;
-                              DealerScreen.selectedYear = value;
+                              carProv.changeYear(value);
                             });
                           },
                           icon: const Icon(

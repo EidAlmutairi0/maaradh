@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:maaradh/Providers/CarsProvider.dart';
+import 'package:provider/provider.dart';
 import 'Screens/MainScreen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,22 +17,25 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [
-        GlobalCupertinoLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('ar', 'AE'), // OR Locale('ar', 'AE') OR Other RTL locales
-      ],
-      locale: const Locale(
-          'ar', 'AE'), // OR Locale('ar', 'AE') OR Other RTL locales,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ChangeNotifierProvider<CarsProvider>(
+      create: (_) => CarsProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [
+          GlobalCupertinoLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('ar', 'AE'), // OR Locale('ar', 'AE') OR Other RTL locales
+        ],
+        locale: const Locale(
+            'ar', 'AE'), // OR Locale('ar', 'AE') OR Other RTL locales,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MainScreen(),
       ),
-      home: MainScreen(),
     );
   }
 }
