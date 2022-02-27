@@ -28,14 +28,16 @@ class _FilterScreenState extends State<FilterScreen> {
   ];
   GroupButtonController brandsGroupButtonController = GroupButtonController();
   void selectedButtons() {
-
-    for (CarBrand brand in Provider.of<CarsProvider>(context, listen: false).savedCarBRands) {
+    for (CarBrand brand
+        in Provider.of<CarsProvider>(context, listen: false).savedCarBRands) {
       int i = brand.index!;
       brandsGroupButtonController.selectedIndexes.add(i);
     }
 
-    if (Provider.of<CarsProvider>(context, listen: false).selectedYear != "1800") {
-      selectedYear = Provider.of<CarsProvider>(context, listen: false).selectedYear;
+    if (Provider.of<CarsProvider>(context, listen: false).selectedYear !=
+        "1800") {
+      selectedYear =
+          Provider.of<CarsProvider>(context, listen: false).selectedYear;
     }
   }
 
@@ -44,7 +46,6 @@ class _FilterScreenState extends State<FilterScreen> {
       yesrs.add(DateTime(DateTime.now().year - i, 1).year.toString());
     }
   }
-
 
   String? selectedYear;
   List<String> yesrs = [];
@@ -98,7 +99,6 @@ class _FilterScreenState extends State<FilterScreen> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     var carProv = Provider.of<CarsProvider>(context);
@@ -116,7 +116,6 @@ class _FilterScreenState extends State<FilterScreen> {
                 onPressed: () {
                   Navigator.pop(context);
                   print(carProv.selectedYear);
-
                 },
                 style: ElevatedButton.styleFrom(primary: Colors.blueAccent),
                 child: Text('Save'),
@@ -162,7 +161,6 @@ class _FilterScreenState extends State<FilterScreen> {
                       print('$index button is removed');
                     } else {
                       carProv.addToBrands(CarBrand(carBrand[index], index));
-
                       print('$index button is add');
                     }
                     for (CarBrand brand in carProv.savedCarBRands) {
