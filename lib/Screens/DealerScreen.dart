@@ -25,7 +25,8 @@ class DealerScreen extends StatefulWidget {
 }
 
 void _launchURL(String url) async {
-  await launch(url);
+  final String encodedURl = Uri.encodeFull(url);
+  await launch(encodedURl);
 }
 
 class _DealerScreenState extends State<DealerScreen> {
