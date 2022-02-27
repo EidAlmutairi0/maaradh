@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                     for (var a in snapshot.data!.docs) {
                       Dealer temp =
-                          Dealer(a.id, a.get('image'), a.get('Name'), 5);
+                          Dealer(a.id, a.get('image'), a.get('Name'), 5 , a.get("phone"), a.get("location"));
                       dealers.add(temp);
                     }
                     return Column(

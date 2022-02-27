@@ -6,7 +6,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import '../Providers/CarsProvider.dart';
 import 'FilterScreen.dart';
-import '../Widgets/FilterElements.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DealerScreen extends StatefulWidget {
@@ -14,14 +14,18 @@ class DealerScreen extends StatefulWidget {
   String? image;
   String? name;
   double? distance;
-  static List<CarBrand> savedCarBRands = [];
-  static String selectedYear = "1800";
+  String? phone;
+  String? location;
 
   // ignore: use_key_in_widget_constructors
-  DealerScreen(this.id, this.image, this.name, this.distance, {Key? key});
+  DealerScreen(this.id, this.image, this.name, this.distance, this.phone ,this.location, {Key? key});
 
   @override
   _DealerScreenState createState() => _DealerScreenState();
+}
+
+void _launchURL(String url) async {
+  await launch(url);
 }
 
 class _DealerScreenState extends State<DealerScreen> {
@@ -92,7 +96,9 @@ class _DealerScreenState extends State<DealerScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                _launchURL("tel:${widget.phone}");
+                              },
                               icon: const Icon(
                                 Icons.phone_outlined,
                                 size: 30,
@@ -108,7 +114,9 @@ class _DealerScreenState extends State<DealerScreen> {
                               ),
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                _launchURL(widget.location!);
+                              },
                               icon: const Icon(
                                 Icons.map_outlined,
                                 size: 30,

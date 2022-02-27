@@ -8,13 +8,9 @@ class Dealer extends StatefulWidget {
   String? image;
   String? name;
   double? distance;
-  Dealer(String id, String image, String name, double distance, {Key? key})
-      : super(key: key) {
-    this.id = id;
-    this.image = image;
-    this.name = name;
-    this.distance = distance;
-  }
+  String? phone;
+  String? location;
+  Dealer(this.id, this.image, this.name, this.distance, this.phone , this.location,{Key? key});
 
   @override
   State<Dealer> createState() => _DealerState();
@@ -35,7 +31,7 @@ class _DealerState extends State<Dealer> {
               context,
               MaterialPageRoute(
                   builder: (context) => DealerScreen(
-                      widget.id, widget.image, widget.name, widget.distance)),
+                      widget.id, widget.image, widget.name, widget.distance , widget.phone, widget.location)),
             );
           },
           child: Container(
