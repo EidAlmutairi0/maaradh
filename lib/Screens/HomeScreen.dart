@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               StreamBuilder<QuerySnapshot>(
-                  stream: _firebaseFirestore.collection('Dealers').snapshots(),
+                  stream: (selectedState != "الكل")?  _firebaseFirestore.collection('Dealers').where("Region" , isEqualTo: selectedState).snapshots(): _firebaseFirestore.collection('Dealers').snapshots(),
                   builder: (context, snapshot) {
                     List<Dealer> dealers = [];
 
