@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
-
-class LocationProvider with ChangeNotifier{
-
-
-
-   double lat = -1;
-   double long = -1;
+class LocationProvider with ChangeNotifier {
+  double lat = -1;
+  double long = -1;
 
   /// Determine the current position of the device.
   ///
@@ -50,11 +46,21 @@ class LocationProvider with ChangeNotifier{
     var location = await Geolocator.getCurrentPosition().then((value) {
       lat = value.latitude;
       long = value.longitude;
+      print(lat);
+      print(long);
       notifyListeners();
       return value;
-
     });
-
+    notifyListeners();
     return location;
+  }
+
+  double getDistance(double latt, double longg) {
+    double temp = -1;
+    if (lat != -1 || long != -1) {
+      temp = Geolocator.distanceBetween(lat, long, latt, longg) / 1000;
+      return temp;
+    }
+    return -1;
   }
 }
