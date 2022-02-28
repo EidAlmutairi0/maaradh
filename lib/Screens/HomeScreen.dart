@@ -1,9 +1,12 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
+import 'MainScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:maaradh/Widgets/DealerWidget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -133,8 +136,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     }
                     for (var a in snapshot.data!.docs) {
+
                       Dealer temp =
-                          Dealer(a.id, a.get('image'), a.get('Name'), 5 , a.get("phone"), a.get("location"));
+                          Dealer(a.id, a.get('image'), a.get('Name'),a.get("lat"), a.get("long") , a.get("phone"), a.get("location"));
                       dealers.add(temp);
                     }
                     return Column(

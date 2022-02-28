@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maaradh/Providers/CarsProvider.dart';
+import 'package:maaradh/Providers/LocationProvider.dart';
 import 'package:provider/provider.dart';
 import 'Screens/MainScreen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -13,12 +14,18 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<CarsProvider>(
-      create: (_) => CarsProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<CarsProvider>(
+          create: (_) => CarsProvider(),
+        ),
+        ChangeNotifierProvider<LocationProvider>(
+          create: (_) => LocationProvider(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         localizationsDelegates: const [

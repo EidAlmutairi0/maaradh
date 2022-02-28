@@ -18,7 +18,7 @@ class DealerScreen extends StatefulWidget {
   String? location;
 
   // ignore: use_key_in_widget_constructors
-  DealerScreen(this.id, this.image, this.name, this.distance, this.phone ,this.location, {Key? key});
+  DealerScreen(this.id, this.image, this.name,  this.phone ,this.location, {Key? key});
 
   @override
   _DealerScreenState createState() => _DealerScreenState();

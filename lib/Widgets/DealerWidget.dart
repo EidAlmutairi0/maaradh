@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:maaradh/Screens/DealerScreen.dart';
 import 'package:maaradh/Screens/HomeScreen.dart';
+import '../Providers/LocationProvider.dart';
+import 'package:provider/provider.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 class Dealer extends StatefulWidget {
   String? id;
   String? image;
   String? name;
-  double? distance;
+  double? lat;
+  double? long;
   String? phone;
   String? location;
-  Dealer(this.id, this.image, this.name, this.distance, this.phone , this.location,{Key? key});
+  double? distance;
+  Dealer(this.id, this.image, this.name,  this.lat,this.long,this.phone , this.location,{Key? key});
 
   @override
   State<Dealer> createState() => _DealerState();
@@ -19,6 +25,12 @@ class Dealer extends StatefulWidget {
 class _DealerState extends State<Dealer> {
   @override
   Widget build(BuildContext context) {
+    var location = Provider.of<LocationProvider>(context);
+    widget.distance = 
+      GeolocatorPlatform.instance.distanceBetween(
+          location.lat, location.long, widget.lat!, widget.long!) / 100000
+    ;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -31,7 +43,7 @@ class _DealerState extends State<Dealer> {
               context,
               MaterialPageRoute(
                   builder: (context) => DealerScreen(
-                      widget.id, widget.image, widget.name, widget.distance , widget.phone, widget.location)),
+                      widget.id, widget.image, widget.name,  widget.phone, widget.location)),
             );
           },
           child: Container(
@@ -70,12 +82,13 @@ class _DealerState extends State<Dealer> {
                           style: GoogleFonts.readexPro(
                               fontSize: 18, fontWeight: FontWeight.w300),
                         ),
-                        // ignore: prefer_const_constructors
-                        Text(
-                          "${widget.distance.toString()}km",
-                          style: TextStyle(
+                        (location.lat == -1 || location.long == -1)?Text(
+                          widget.distance!.toStringAsFixed(2),
+                          style: GoogleFonts.readexPro(
                               fontSize: 18, fontWeight: FontWeight.w300),
-                        ),
+                        ):Container()
+                        // ignore: prefer_const_constructors
+
                       ],
                     ),
                   ),
