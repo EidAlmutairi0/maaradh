@@ -36,6 +36,7 @@ class _DealerState extends State<Dealer> {
 
   @override
   Widget build(BuildContext context) {
+    var distanceProvider = Provider.of<LocationProvider>(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -87,9 +88,9 @@ class _DealerState extends State<Dealer> {
                           style: GoogleFonts.readexPro(
                               fontSize: 18, fontWeight: FontWeight.w300),
                         ),
-                        (widget.distance != -1)
+                        (distanceProvider.getDistance(widget.lat!, widget.long!) != -1)
                             ? Text(
-                                widget.distance!.toStringAsFixed(1) + "km",
+                          distanceProvider.getDistance(widget.lat!, widget.long!).toStringAsFixed(1) + "km",
                                 style: GoogleFonts.readexPro(
                                     fontSize: 18, fontWeight: FontWeight.w300),
                               )

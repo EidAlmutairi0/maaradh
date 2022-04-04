@@ -1,10 +1,12 @@
 // ignore: file_names
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'MainScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:maaradh/Widgets/DealerWidget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 
 
@@ -17,7 +19,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+
+
 
   String? selectedState;
   List<String> states = [
@@ -34,7 +37,17 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+
+
+
+
+  @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -45,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: SingleChildScrollView(
           child: Column(
+
             children: [
               Container(
                 alignment: Alignment.centerLeft,
@@ -124,27 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              StreamBuilder<QuerySnapshot>(
-                  stream: (selectedState != "الكل")?  _firebaseFirestore.collection('Dealers').where("Region" , isEqualTo: selectedState).snapshots(): _firebaseFirestore.collection('Dealers').snapshots(),
-                  builder: (context, snapshot) {
-                    List<Dealer> dealers = [];
 
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Padding(
-                        padding: EdgeInsets.only(top: 200),
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    for (var a in snapshot.data!.docs) {
-
-                      Dealer temp =
-                          Dealer(a.id, a.get('image'), a.get('Name'),a.get("lat"), a.get("long") , a.get("phone"), a.get("location"));
-                      dealers.add(temp);
-                    }
-                    return Column(
-                      children: dealers,
-                    );
-                  }),
             ],
           ),
         ));

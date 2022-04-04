@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import '../Providers/CarsProvider.dart';
 import 'FilterScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DealerScreen extends StatefulWidget {
   String? id;
@@ -49,7 +48,6 @@ class _DealerScreenState extends State<DealerScreen> {
     return tempList;
   }
 
-  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   @override
   @override
@@ -167,51 +165,7 @@ class _DealerScreenState extends State<DealerScreen> {
           SliverList(
             delegate: SliverChildListDelegate([
               Center(
-                child: StreamBuilder<QuerySnapshot>(
-                    stream: (carProv.selectedYear == "1800")
-                        ? _firebaseFirestore
-                            .collection('Dealers')
-                            .doc(widget.id)
-                            .collection("Cars")
-                            .snapshots()
-                        : _firebaseFirestore
-                            .collection('Dealers')
-                            .doc(widget.id)
-                            .collection("Cars")
-                            .where("Year", isEqualTo: carProv.selectedYear)
-                            .snapshots(),
-                    builder: (context, snapshot) {
-                      List<Car> cars = [];
 
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                      if (snapshot.hasError || snapshot.data!.docs.isEmpty) {
-                        return const Padding(
-                          padding: EdgeInsets.only(top: 20),
-                          child: Text("لا يوجد سيارات"),
-                        );
-                      }
-                      for (var car in snapshot.data!.docs) {
-                        Car temp = Car(
-                            car.get("image"),
-                            car.get("Name"),
-                            car.get("Year"),
-                            car.get("Price"),
-                            car.get("Mileage"),
-                            car.get("brand"));
-                        cars.add(temp);
-                      }
-
-                      cars = filter(cars , context)!;
-
-                      return GridView.count(
-                        physics: ClampingScrollPhysics(),
-                        shrinkWrap: true,
-                        crossAxisCount: 2,
-                        children: cars,
-                      );
-                    }),
               ),
             ]),
           ),

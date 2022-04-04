@@ -1,12 +1,13 @@
 // ignore_for_file: file_names
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'MapScreen.dart';
 import 'HomeScreen.dart';
 import 'MessagesScreen.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:provider/provider.dart';
-
 import '../Providers/LocationProvider.dart';
 
 // ignore: use_key_in_widget_constructors
@@ -16,18 +17,39 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+
+  bool delay = true;
+  void timer(){
+    Timer _timer;
+    _timer = Timer(const Duration(seconds: 1), () {
+      setState(() {
+        delay = false;
+      });
+    });
+  }
+
+
   int pageIndex = 1;
   List pages = [MapScreen(), HomeScreen(), MessagesScreen()];
 
   @override
   void initState() {
+    timer();
     Provider.of<LocationProvider>(context, listen: false).determinePosition();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return (delay) ?  Container(
+
+      child: Center(
+        child: CircularProgressIndicator(
+          color: Colors.white,
+        ),
+      ),
+      color:  Colors.blue,
+    ):Scaffold(
       bottomNavigationBar: ConvexAppBar(
         items: const [
           TabItem(icon: Icons.map),
