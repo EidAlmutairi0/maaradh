@@ -1,7 +1,9 @@
 // ignore: file_names
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'MainScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:maaradh/Widgets/DealerWidget.dart';
@@ -19,6 +21,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<Dealer> dealers = [];
+  
+  Future getDealers() async{
+    http.Response response = await http.get(Uri.parse("http://localhost:4000/buyer/dealers"));
+    if (response.statusCode == 200) {
+      if(response.body.isEmpty){
+        throw Error();
+      }
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+
+
+
+
+      for(int i = 0; i<=data.length; i++){
+        Dealer dealer = Dealer(data['dealers'][i]['_id'], "http://localhost:4000/" + data['dealers'][i]['imageUrl'], data['dealers'][i]['name'], data['dealers'][i]['lat'], data['dealers'][i]['long'], data['dealers'][i]['phone'], data['dealers'][i]['location']);
+        dealers.add(dealer);
+      }
+
+    } else {
+      throw Error();
+
+    }
+
+
+  }
 
 
 
@@ -138,6 +166,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
+              FutureBuilder(
+                builder: (ctx, snapshot) {
+                  if(snapshot.connectionState == ConnectionState.waiting){
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if(snapshot.hasError){
+                    return const Center(
+                      child: Text("Error"),
+                    );
+                  }
+                  if(snapshot.connectionState == ConnectionState.done){
+                    return Column(
+                      children: dealers,
+                    );
+                  }
+                  return Column(
+                    children: dealers,
+                  );
+                },
+                future: getDealers(),
+              ),
+
 
             ],
           ),

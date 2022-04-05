@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:maaradh/Widgets/CarWidget.dart';
@@ -7,6 +9,8 @@ import 'package:provider/provider.dart';
 import '../Providers/CarsProvider.dart';
 import 'FilterScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
+
 
 class DealerScreen extends StatefulWidget {
   String? id;
@@ -23,12 +27,41 @@ class DealerScreen extends StatefulWidget {
   _DealerScreenState createState() => _DealerScreenState();
 }
 
+
+
 void _launchURL(String url) async {
   final String encodedURl = Uri.encodeFull(url);
   await launch(encodedURl);
 }
 
 class _DealerScreenState extends State<DealerScreen> {
+  List<Car> cars = [];
+
+  Future getDCars() async{
+
+    http.Response response = await http.get(Uri.parse("http://localhost:4000/buyer/dealer/${widget.id!}"));
+    if (response.statusCode == 200) {
+      if(response.body.isEmpty){
+        throw Error();
+      }
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      List<dynamic> temp = data['cars'];
+      print(temp[0]);
+
+      for(var car in temp){
+        cars.add(   Car( "http://localhost:4000/" + car['imageUrl'], car['name'], car['year'], car['price'],car['mileage'], car['brand'])
+        );
+      }
+
+    } else {
+      throw Error();
+
+    }
+
+
+  }
+
   List<Car>? filter(List<Car> cars , context) {
     var carProv = Provider.of<CarsProvider>(context);
     List<Car> tempList = [];
@@ -165,7 +198,28 @@ class _DealerScreenState extends State<DealerScreen> {
           SliverList(
             delegate: SliverChildListDelegate([
               Center(
+               child: FutureBuilder(
+                 builder: (ctx, snapshot) {
+                   if(snapshot.connectionState == ConnectionState.waiting){
+                     return const Center(
+                       child: CircularProgressIndicator(),
+                     );
+                   }
+                   if(snapshot.hasError){
 
+                     return const Center(
+                       child: Text("No cars"),
+                     );
+                   }
+                   return GridView.count(
+                     physics: ClampingScrollPhysics(),
+                     shrinkWrap: true,
+                     crossAxisCount: 2,
+                     children: cars,
+                   );
+                 },
+                 future: getDCars(),
+               ),
               ),
             ]),
           ),
