@@ -1,16 +1,16 @@
-// ignore: file_names
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'MainScreen.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:maaradh/Widgets/DealerWidget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:maaradh/Providers/LocationProvider.dart';
+import 'package:maaradh/Widgets/DealerWidget.dart';
+import 'package:provider/provider.dart';
 
-
-
+import '../Providers/DearlersProvider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -22,33 +22,48 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Dealer> dealers = [];
-  
-  Future getDealers() async{
-    http.Response response = await http.get(Uri.parse("http://localhost:4000/buyer/dealers"));
+
+  Future getDealers(var lat, var long) async {
+    dealers = [];
+    http.Response response =
+        await http.get(Uri.parse("http://localhost:4000/buyer/dealers"));
     if (response.statusCode == 200) {
-      if(response.body.isEmpty){
+      if (response.body.isEmpty) {
         throw Error();
       }
-      Map<String, dynamic> data = jsonDecode(response.body);
+      Map<String, dynamic> data = await jsonDecode(response.body);
+      List<dynamic> temp = await data['dealers'];
 
-
-
-
-
-      for(int i = 0; i<=data.length; i++){
-        Dealer dealer = Dealer(data['dealers'][i]['_id'], "http://localhost:4000/" + data['dealers'][i]['imageUrl'], data['dealers'][i]['name'], data['dealers'][i]['lat'], data['dealers'][i]['long'], data['dealers'][i]['phone'], data['dealers'][i]['location']);
+      for (int i = 0; i < temp.length; i++) {
+        Dealer dealer = Dealer(
+            temp[i]['_id'],
+            "http://localhost:4000/" + temp[i]['imageUrl'],
+            temp[i]['name'],
+            temp[i]['lat'],
+            temp[i]['long'],
+            temp[i]['phone'],
+            temp[i]['location'],
+            Geolocator.distanceBetween(
+                    lat, long, temp[i]['lat'], temp[i]['long']) /
+                1000,
+            temp[i]['region']);
         dealers.add(dealer);
       }
 
+      dealers.sort((a, b) => a.distance.compareTo(b.distance));
+      if (selectedState != null && selectedState != "الكل") {
+        dealers = dealers
+            .where((element) => element.region == selectedState)
+            .toList();
+      }
+
+      return;
     } else {
       throw Error();
-
     }
 
 
   }
-
-
 
   String? selectedState;
   List<String> states = [
@@ -66,16 +81,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    Provider.of<LocationProvider>(context, listen: false).determinePosition();
+
+    Provider.of<DealerProvider>(context, listen: false).getDealers(context);
     super.initState();
   }
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -133,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       value: selectedState,
                       onChanged: (value) {
                         setState(() {
-                          selectedState = value as String;
+                          selectedState = value.toString();
                         });
                       },
                       icon: const Icon(
@@ -166,31 +179,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              FutureBuilder(
-                builder: (ctx, snapshot) {
-                  if(snapshot.connectionState == ConnectionState.waiting){
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  if(snapshot.hasError){
-                    return const Center(
-                      child: Text("Error"),
-                    );
-                  }
-                  if(snapshot.connectionState == ConnectionState.done){
-                    return Column(
-                      children: dealers,
-                    );
-                  }
-                  return Column(
-                    children: dealers,
-                  );
-                },
-                future: getDealers(),
-              ),
-
-
+              Column(
+                children:
+                    Provider.of<DealerProvider>(context, listen: true).dealers,
+              )
             ],
           ),
         ));

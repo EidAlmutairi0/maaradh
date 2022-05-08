@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:maaradh/Screens/DealerScreen.dart';
 import 'package:maaradh/Screens/HomeScreen.dart';
-import '../Providers/LocationProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:geolocator/geolocator.dart';
+
+import '../Providers/LocationProvider.dart';
 
 class Dealer extends StatefulWidget {
   String? id;
@@ -14,9 +14,11 @@ class Dealer extends StatefulWidget {
   double? long;
   String? phone;
   String? location;
-  double? distance;
+  double distance;
+  String region;
+
   Dealer(this.id, this.image, this.name, this.lat, this.long, this.phone,
-      this.location,
+      this.location, this.distance, this.region,
       {Key? key});
 
   @override
@@ -25,14 +27,6 @@ class Dealer extends StatefulWidget {
 
 class _DealerState extends State<Dealer> {
   @override
-  void initState() {
-    setState(() {
-      widget.distance = Provider.of<LocationProvider>(context, listen: false)
-          .getDistance(widget.lat!, widget.long!);
-    });
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,13 +82,11 @@ class _DealerState extends State<Dealer> {
                           style: GoogleFonts.readexPro(
                               fontSize: 18, fontWeight: FontWeight.w300),
                         ),
-                        (distanceProvider.getDistance(widget.lat!, widget.long!) != -1)
-                            ? Text(
-                          distanceProvider.getDistance(widget.lat!, widget.long!).toStringAsFixed(1) + "km",
-                                style: GoogleFonts.readexPro(
-                                    fontSize: 18, fontWeight: FontWeight.w300),
-                              )
-                            : Container()
+                        Text(
+                          widget.distance.toStringAsFixed(1) + "km",
+                          style: GoogleFonts.readexPro(
+                              fontSize: 18, fontWeight: FontWeight.w300),
+                        )
                         // ignore: prefer_const_constructors
                       ],
                     ),

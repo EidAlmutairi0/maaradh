@@ -58,7 +58,9 @@ class LocationProvider with ChangeNotifier {
   double getDistance(double latt, double longg) {
     double temp = -1;
     if (lat != -1 || long != -1) {
-      temp = Geolocator.distanceBetween(lat, long, latt, longg) / 1000;
+      temp = Geolocator.distanceBetween(
+              LocationProvider().lat, LocationProvider().long, latt, longg) /
+          1000;
       return temp;
     }
     return -1;

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:maaradh/Providers/CarsProvider.dart';
 import 'package:maaradh/Providers/LocationProvider.dart';
 import 'package:provider/provider.dart';
+
+import '../Providers/LocationProvider.dart';
+import 'Providers/DearlersProvider.dart';
 import 'Screens/MainScreen.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,6 +15,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -19,6 +23,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<CarsProvider>(
           create: (_) => CarsProvider(),
+        ),
+        ChangeNotifierProvider<DealerProvider>(
+          create: (_) => DealerProvider(),
         ),
         ChangeNotifierProvider<LocationProvider>(
           create: (_) => LocationProvider(),

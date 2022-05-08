@@ -2,15 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:maaradh/Widgets/CarWidget.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:maaradh/Widgets/CarWidget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
-import '../Providers/CarsProvider.dart';
-import 'FilterScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:http/http.dart' as http;
 
+import '../Providers/CarsProvider.dart';
+import '../Widgets/PersistentHeader.dart';
+import 'FilterScreen.dart';
 
 class DealerScreen extends StatefulWidget {
   String? id;
@@ -41,19 +42,17 @@ class _DealerScreenState extends State<DealerScreen> {
 
     http.Response response = await http.get(Uri.parse("http://localhost:4000/buyer/dealer/${widget.id!}"));
     if (response.statusCode == 200) {
-      if(response.body.isEmpty){
+      if (response.body.isEmpty) {
         throw Error();
       }
       Map<String, dynamic> data = jsonDecode(response.body);
 
       List<dynamic> temp = data['cars'];
-      print(temp[0]);
 
-      for(var car in temp){
-        cars.add(   Car( "http://localhost:4000/" + car['imageUrl'], car['name'], car['year'], car['price'],car['mileage'], car['brand'])
-        );
+      for (var car in temp) {
+        cars.add(Car("http://localhost:4000/" + car['imageUrl'], car['name'],
+            car['year'], car['price'], car['mileage'], car['brand']));
       }
-
     } else {
       throw Error();
 
@@ -82,8 +81,6 @@ class _DealerScreenState extends State<DealerScreen> {
   }
 
 
-  @override
-  @override
 
   @override
   Widget build(BuildContext context) {
@@ -105,63 +102,72 @@ class _DealerScreenState extends State<DealerScreen> {
                 fit: BoxFit.cover,
               ),
             ),
-            expandedHeight: MediaQuery.of(context).size.height * 0.305,
+            expandedHeight: MediaQuery.of(context).size.height * 0.2,
+          ),
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: PersistentHeader(
+              widget: Column(
+                // Format this to meet your need
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 30, right: 30),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  _launchURL("tel:${widget.phone}");
+                                },
+                                icon: const Icon(
+                                  Icons.phone_outlined,
+                                  size: 30,
+                                  color: Colors.blueAccent,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.mail_outline_rounded,
+                                  size: 30,
+                                  color: Colors.blueAccent,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  _launchURL(widget.location!);
+                                },
+                                icon: const Icon(
+                                  Icons.map_outlined,
+                                  size: 30,
+                                  color: Colors.blueAccent,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           SliverPadding(
             padding: EdgeInsets.all(5),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
-                  ),
-                  height: 50,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 30, right: 30),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                _launchURL("tel:${widget.phone}");
-                              },
-                              icon: const Icon(
-                                Icons.phone_outlined,
-                                size: 30,
-                                color: Colors.blueAccent,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.mail_outline_rounded,
-                                size: 30,
-                                color: Colors.blueAccent,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                _launchURL(widget.location!);
-                              },
-                              icon: const Icon(
-                                Icons.map_outlined,
-                                size: 30,
-                                color: Colors.blueAccent,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const Divider(),
                 Container(
                   alignment: Alignment.topLeft,
                   child: Padding(
@@ -177,7 +183,6 @@ class _DealerScreenState extends State<DealerScreen> {
                       },
                       child: Container(
                         width: 70,
-                        alignment: Alignment.topLeft,
                         child: Row(
                           children: const [
                             Text("تصفية"),
@@ -197,29 +202,32 @@ class _DealerScreenState extends State<DealerScreen> {
           ),
           SliverList(
             delegate: SliverChildListDelegate([
-              Center(
-               child: FutureBuilder(
-                 builder: (ctx, snapshot) {
-                   if(snapshot.connectionState == ConnectionState.waiting){
-                     return const Center(
-                       child: CircularProgressIndicator(),
-                     );
-                   }
-                   if(snapshot.hasError){
+              FutureBuilder(
+                builder: (ctx, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return const Center(
+                      child: Text("No cars"),
+                    );
+                  }
+                  if (cars.isEmpty) {
+                    return const Center(
+                      child: Text("No cars"),
+                    );
+                  }
 
-                     return const Center(
-                       child: Text("No cars"),
-                     );
-                   }
-                   return GridView.count(
-                     physics: ClampingScrollPhysics(),
-                     shrinkWrap: true,
-                     crossAxisCount: 2,
-                     children: cars,
-                   );
-                 },
-                 future: getDCars(),
-               ),
+                  return GridView.count(
+                    physics: ScrollPhysics(),
+                    crossAxisCount: 2,
+                    shrinkWrap: true,
+                    children: cars,
+                  );
+                },
+                future: getDCars(),
               ),
             ]),
           ),

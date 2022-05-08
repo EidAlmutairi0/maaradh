@@ -36,8 +36,6 @@ class Car extends StatelessWidget {
             ],
             borderRadius: BorderRadius.circular(15),
           ),
-          width: MediaQuery.of(context).size.width - 70,
-          height: 100,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: GridTile(
