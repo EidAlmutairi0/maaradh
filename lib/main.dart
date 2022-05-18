@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
             'ar', 'AE'), // OR Locale('ar', 'AE') OR Other RTL locales,
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          canvasColor: Colors.transparent,
         ),
         home: MainScreen(),
       ),

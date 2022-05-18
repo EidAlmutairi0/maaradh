@@ -1,15 +1,13 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:maaradh/Widgets/CarWidget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../Providers/CarsProvider.dart';
+import '../Providers/DearlersProvider.dart';
 import '../Widgets/PersistentHeader.dart';
 import 'FilterScreen.dart';
 
@@ -22,70 +20,54 @@ class DealerScreen extends StatefulWidget {
   String? location;
 
   // ignore: use_key_in_widget_constructors
-  DealerScreen(this.id, this.image, this.name,  this.phone ,this.location, {Key? key});
+  DealerScreen(this.id, this.image, this.name, this.phone, this.location,
+      {Key? key});
 
   @override
   _DealerScreenState createState() => _DealerScreenState();
 }
-
-
 
 void _launchURL(String url) async {
   final String encodedURl = Uri.encodeFull(url);
   await launch(encodedURl);
 }
 
-class _DealerScreenState extends State<DealerScreen> {
-  List<Car> cars = [];
-
-  Future getDCars() async{
-
-    http.Response response = await http.get(Uri.parse("http://localhost:4000/buyer/dealer/${widget.id!}"));
-    if (response.statusCode == 200) {
-      if (response.body.isEmpty) {
-        throw Error();
-      }
-      Map<String, dynamic> data = jsonDecode(response.body);
-
-      List<dynamic> temp = data['cars'];
-
-      for (var car in temp) {
-        cars.add(Car("http://localhost:4000/" + car['imageUrl'], car['name'],
-            car['year'], car['price'], car['mileage'], car['brand']));
-      }
-    } else {
-      throw Error();
-
-    }
-
-
-  }
-
-  List<Car>? filter(List<Car> cars , context) {
-    var carProv = Provider.of<CarsProvider>(context);
-    List<Car> tempList = [];
-    if (carProv.savedCarBRands.isNotEmpty) {
-      for (Car car in cars) {
-        for (int i = 0; i < carProv.savedCarBRands.length; i++) {
-          if (carProv.savedCarBRands[i].brandName == car.brand) {
-            tempList.add(car);
-          }
+Future<List<Car>> filter(id, context) async {
+  List<Car> cars =
+      await Provider.of<DealerProvider>(context, listen: false).getDCars(id);
+  var carProv = Provider.of<CarsProvider>(context, listen: false);
+  List<Car> tempList = [];
+  if (carProv.savedCarBRands.isNotEmpty) {
+    for (Car car in cars) {
+      for (int i = 0; i < carProv.savedCarBRands.length; i++) {
+        if (carProv.savedCarBRands[i].brandName == car.brand) {
+          tempList.add(car);
         }
-        // ignore: iterable_contains_unrelated_type
-
       }
-    } else {
-      return cars;
+      if (carProv.selectedYear != "1800") {
+        return tempList
+            .where((element) => element.year == carProv.selectedYear)
+            .toList();
+      }
     }
-    return tempList;
+  } else {
+    if (carProv.selectedYear != "1800") {
+      return cars
+          .where((element) => element.year == carProv.selectedYear)
+          .toList();
+    }
+    return cars;
   }
 
+  return tempList;
+}
 
-
+class _DealerScreenState extends State<DealerScreen> {
   @override
   Widget build(BuildContext context) {
     var carProv = Provider.of<CarsProvider>(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
@@ -202,7 +184,7 @@ class _DealerScreenState extends State<DealerScreen> {
           ),
           SliverList(
             delegate: SliverChildListDelegate([
-              FutureBuilder(
+              FutureBuilder<List<Car>>(
                 builder: (ctx, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -210,11 +192,12 @@ class _DealerScreenState extends State<DealerScreen> {
                     );
                   }
                   if (snapshot.hasError) {
+                    print(snapshot.error);
                     return const Center(
-                      child: Text("No cars"),
+                      child: Text("No jj"),
                     );
                   }
-                  if (cars.isEmpty) {
+                  if (snapshot.data!.isEmpty) {
                     return const Center(
                       child: Text("No cars"),
                     );
@@ -224,10 +207,10 @@ class _DealerScreenState extends State<DealerScreen> {
                     physics: ScrollPhysics(),
                     crossAxisCount: 2,
                     shrinkWrap: true,
-                    children: cars,
+                    children: snapshot.data!.toList(),
                   );
                 },
-                future: getDCars(),
+                future: filter(widget.id, context),
               ),
             ]),
           ),

@@ -1,8 +1,7 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 
-// ignore: use_key_in_widget_constructors
+import 'LoginScreen.dart';
+
 class MessagesScreen extends StatefulWidget {
   @override
   _MessagesScreenState createState() => _MessagesScreenState();
@@ -11,6 +10,6 @@ class MessagesScreen extends StatefulWidget {
 class _MessagesScreenState extends State<MessagesScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return LoginSreen();
   }
 }

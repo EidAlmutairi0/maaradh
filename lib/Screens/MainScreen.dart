@@ -6,7 +6,7 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../Providers/LocationProvider.dart';
+import '../Providers/DearlersProvider.dart';
 import 'HomeScreen.dart';
 import 'MapScreen.dart';
 import 'MessagesScreen.dart';
@@ -34,7 +34,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
-    Provider.of<LocationProvider>(context, listen: false).determinePosition();
+    Provider.of<DealerProvider>(context, listen: false).getDealers(context);
+
     timer();
 
     super.initState();

@@ -1,11 +1,11 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:group_button/group_button.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:group_button/group_button.dart';
 import 'package:maaradh/Providers/CarsProvider.dart';
 import 'package:provider/provider.dart';
-import 'DealerScreen.dart';
+
 import '../Widgets/FilterElements.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 
 class FilterScreen extends StatefulWidget {
   const FilterScreen({Key? key}) : super(key: key);
@@ -27,6 +27,7 @@ class _FilterScreenState extends State<FilterScreen> {
     "BMW"
   ];
   GroupButtonController brandsGroupButtonController = GroupButtonController();
+
   void selectedButtons() {
     for (CarBrand brand
         in Provider.of<CarsProvider>(context, listen: false).savedCarBRands) {
@@ -51,6 +52,7 @@ class _FilterScreenState extends State<FilterScreen> {
   List<String> yesrs = [];
 
   DateTime selectedDate = DateTime(DateTime.now().year + 2, 1);
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDialog(
       context: context,
@@ -105,6 +107,7 @@ class _FilterScreenState extends State<FilterScreen> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.6,
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white60,
           centerTitle: false,

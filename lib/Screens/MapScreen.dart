@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
+import 'package:google_fonts/google_fonts.dart';
 import "package:latlong2/latlong.dart" as latLng;
+import 'package:maaradh/Screens/DealerScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../Providers/DearlersProvider.dart';
@@ -21,6 +23,55 @@ class _MapScreenState extends State<MapScreen> {
   List<Marker> marker = [];
   List<Marker> markers = [];
 
+  void _modalBottomSheetMenu(Dealer dealer) {
+    showModalBottomSheet(
+        context: context,
+        builder: (builder) {
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DealerScreen(dealer.id, dealer.image,
+                        dealer.name, dealer.phone, dealer.location)),
+              );
+            },
+            child: Card(
+              margin: EdgeInsets.only(left: 10, right: 10, bottom: 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: GridTile(
+                    child: Image.network(
+                      dealer.image!,
+                      fit: BoxFit.cover,
+                    ),
+                    footer: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.white,
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.1,
+                      child: Center(
+                        child: Text(
+                          dealer.name!,
+                          style: GoogleFonts.readexPro(
+                              fontSize: 30, fontWeight: FontWeight.w300),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
   void getMarkers() {
     marker.add(Marker(
       width: 80.0,
@@ -29,7 +80,7 @@ class _MapScreenState extends State<MapScreen> {
           Provider.of<LocationProvider>(context, listen: false).lat,
           Provider.of<LocationProvider>(context, listen: false).long),
       builder: (ctx) => Container(
-        child: Icon(
+        child: const Icon(
           Icons.my_location,
           color: Colors.blueGrey,
         ),
@@ -40,7 +91,15 @@ class _MapScreenState extends State<MapScreen> {
       markers.add(Marker(
         point: latLng.LatLng(dealer.lat!, dealer.long!),
         builder: (ctx) => Container(
-          child: Icon(Icons.car_rental_rounded),
+          child: IconButton(
+            icon: const Icon(
+              Icons.car_repair_outlined,
+              size: 30,
+            ),
+            onPressed: () {
+              _modalBottomSheetMenu(dealer);
+            },
+          ),
         ),
       ));
     }
